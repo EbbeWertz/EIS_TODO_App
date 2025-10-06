@@ -4,7 +4,6 @@ import 'package:eis_todo_app/view/modals/todo_detail_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class TodoTile extends StatelessWidget {
   final Todo todo;
 

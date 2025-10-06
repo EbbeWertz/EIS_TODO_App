@@ -1,3 +1,4 @@
+import 'package:eis_todo_app/model/data_models/todo_list.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
 import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
 import 'package:eis_todo_app/view/modals/add_todo_sheet.dart';
@@ -6,32 +7,34 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TodoListPage extends StatelessWidget {
-  final String listName;
+  final TodoList todoList;
 
-  const TodoListPage({super.key, required this.listName});
+  const TodoListPage({super.key, required this.todoList});
 
   @override
   Widget build(BuildContext context) {
-    final collection = context.read<TodoListsNotifier>();
-    final todoList = collection.getList(listName);
-
-    if (todoList == null) {
-      return const Scaffold(
-        body: Center(child: Text('List not found')),
-      );
-    }
+    final todoLists = context.read<TodoListsNotifier>();
 
     return ChangeNotifierProvider(
       create: (_) => TodoListNotifier(todoList),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(listName),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Row(
+            children: [
+              Icon(todoList.icon),
+              const SizedBox(width: 16),
+              Text(todoList.name),
+            ],
+          ),
+          backgroundColor: ColorScheme.fromSeed(
+            seedColor: todoList.color,
+            brightness: Theme.of(context).brightness,
+          ).inversePrimary,
           actions: [
             PopupMenuButton<String>(
               onSelected: (value) {
                 if (value == 'delete') {
-                  _confirmDelete(context, collection);
+                  _confirmDelete(context, todoLists);
                 }
               },
               itemBuilder: (context) => [
@@ -53,7 +56,7 @@ class TodoListPage extends StatelessWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, TodoListsNotifier collection) {
+  void _confirmDelete(BuildContext context, TodoListsNotifier todoLists) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -69,7 +72,7 @@ class TodoListPage extends StatelessWidget {
               backgroundColor: Colors.red,
             ),
             onPressed: () {
-              collection.removeList(listName);
+              todoLists.removeList(todoList);
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Go back to previous page
             },

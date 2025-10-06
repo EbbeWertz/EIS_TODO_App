@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   ThemeData buildDarkThemeData() {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.cyan,
+        seedColor: Colors.grey,
         brightness: Brightness.dark,
       ),
       useMaterial3: true,
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
 
   ThemeData buildLightThemeData() {
     return ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
       useMaterial3: true,
       brightness: Brightness.light,
     );

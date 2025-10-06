@@ -2,21 +2,21 @@ import 'todo_list.dart';
 import 'package:flutter/material.dart';
 
 class TodoLists {
-  final Map<String, TodoList> _lists = {};
+  final List<TodoList> _lists = [];
 
-  List<String> get listNames => _lists.keys.toList();
-
-  List<TodoList> get lists => List.unmodifiable(_lists.values);
-
-  TodoList? getList(String name) => _lists[name];
+  List<TodoList> get lists => List.unmodifiable(_lists);
 
   void addList(String name, Color color, IconData icon) {
-    if (!_lists.containsKey(name)) {
-      _lists[name] = TodoList(name: name, color: color, icon: icon);
-    }
+    _lists.insert(0, TodoList(name: name, color: color, icon: icon));
   }
 
-  void removeList(String name) {
-    _lists.remove(name);
+  void removeList(TodoList todoList) {
+    _lists.remove(todoList);
   }
+
+  void reOrderLists(int fromIndex, int toIndex){
+    TodoList item = _lists.removeAt(fromIndex);
+    _lists.insert(toIndex, item);
+  }
+
 }

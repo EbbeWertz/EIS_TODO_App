@@ -3,9 +3,10 @@ import 'package:eis_todo_app/view/widgets/pages/todo_list_page.dart';
 import 'package:flutter/material.dart';
 
 class TodoListTile extends StatelessWidget {
-  const TodoListTile({super.key, required this.list});
+  const TodoListTile({super.key, required this.list, required this.index});
 
   final TodoList list;
+  final int index; // needed for drag listener
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,24 @@ class TodoListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         clipBehavior: Clip.antiAlias,
         child: ListTile(
-          leading: Icon(list.icon, color: list.color),
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ReorderableDragStartListener(
+                index: index,
+                child: Icon(Icons.drag_indicator, color: Theme.of(context).iconTheme.color?.withAlpha(16)),
+              ),
+              const SizedBox(width: 8),
+              Icon(list.icon, color: list.color),
+            ],
+          ),
           title: Text(list.name),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => TodoListPage(listName: list.name),
+                builder: (_) => TodoListPage(todoList: list),
               ),
             );
           },

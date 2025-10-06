@@ -7,15 +7,17 @@ class TodoListsNotifier extends ChangeNotifier {
 
   List<TodoList> get lists => _model.lists;
 
-  TodoList? getList(String name) => _model.getList(name);
-
   void addList(String name, Color color, IconData? icon) {
     _model.addList(name, color, (icon ?? Icons.list));
     notifyListeners();
   }
+  void removeList(TodoList list) {
+    _model.removeList(list);
+    notifyListeners();
+  }
 
-  void removeList(String name) {
-    _model.removeList(name);
+  void reOrderLists(int fromIndex, int toIndex){
+    _model.reOrderLists(fromIndex, toIndex);
     notifyListeners();
   }
 }

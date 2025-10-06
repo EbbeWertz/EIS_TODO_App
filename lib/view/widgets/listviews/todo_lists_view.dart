@@ -9,22 +9,41 @@ class TodoListsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        for (final list in todoLists.lists) TodoListTile(list: list),
-        if (todoLists.lists.isEmpty)
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Text(
-                'No lists yet.\nTap + to add one!',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
+    if (todoLists.lists.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Text(
+            'No lists yet.\nTap + to add one!',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.grey),
           ),
+        ),
+      );
+    }
+
+    return ReorderableListView(
+      padding: const EdgeInsets.all(16),
+      onReorder: (oldIndex, newIndex) {
+        if (newIndex > oldIndex) newIndex -= 1;
+        todoLists.reOrderLists(oldIndex, newIndex);
+      },
+      children: [
+        for (int i = 0; i < todoLists.lists.length; i++)
+          TodoListTile(key: ValueKey(todoLists.lists[i].id), list: todoLists.lists[i], index: i),
       ],
+      // proxyDecorator = vorm voor de schaduw als de tile ge-dragged word
+      // default vorm = een rectangle box, wat niet aansluit bij de tile shape
+      proxyDecorator: (child, index, animation) {
+        return Material(
+          borderRadius: BorderRadius.circular(12),
+          elevation: 4,
+          color: Colors.transparent,
+          shadowColor: Colors.black26,
+          child: child,
+        );
+      },
     );
   }
+
 }

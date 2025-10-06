@@ -26,20 +26,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EIS TODO App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-        useMaterial3: true,
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.cyan,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
+      theme: buildLightThemeData(),
+      darkTheme: buildDarkThemeData(),
       themeMode: themeModel.themeMode,
       home: const AllListsPage(),
+    );
+  }
+
+  ThemeData buildDarkThemeData() {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.cyan,
+        brightness: Brightness.dark,
+      ),
+      useMaterial3: true,
+    );
+  }
+
+  ThemeData buildLightThemeData() {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+      useMaterial3: true,
+      brightness: Brightness.light,
     );
   }
 }

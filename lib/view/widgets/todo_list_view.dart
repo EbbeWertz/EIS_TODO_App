@@ -1,5 +1,5 @@
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
-import 'package:eis_todo_app/view/widgets/todo_list_tile.dart';
+import 'package:eis_todo_app/view/widgets/todo_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class TodoListView extends StatelessWidget {
               ),
             ),
           ),
-        ...activeTodos.map((todo) => TodoListTile(todo: todo)),
+        ...activeTodos.map((todo) => TodoTile(todo: todo)),
         if (completedTodos.isNotEmpty) ...[
           const SizedBox(height: 16),
           ExpansionTile(
@@ -39,7 +39,7 @@ class TodoListView extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            children: completedTodos.map((todo) => TodoListTile(todo: todo)).toList(),
+            children: completedTodos.map((todo) => TodoTile(todo: todo)).toList(),
           ),
         ],
       ],

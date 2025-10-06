@@ -1,5 +1,5 @@
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
-import 'package:eis_todo_app/view/widgets/todo_tile.dart';
+import 'package:eis_todo_app/view/widgets/listviews/todo_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

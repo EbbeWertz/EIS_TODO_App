@@ -1,5 +1,5 @@
 import 'package:eis_todo_app/model/data_models/todo_list.dart';
-import 'package:eis_todo_app/view/todo_list_page.dart';
+import 'package:eis_todo_app/view/widgets/pages/todo_list_page.dart';
 import 'package:flutter/material.dart';
 
 class TodoListTile extends StatelessWidget {

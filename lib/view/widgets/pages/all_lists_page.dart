@@ -1,7 +1,7 @@
 import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
-import 'package:eis_todo_app/view/widgets/color_selector.dart';
-import 'package:eis_todo_app/view/widgets/icon_selector.dart';
-import 'package:eis_todo_app/view/widgets/todo_lists_view.dart';
+import 'package:eis_todo_app/view/widgets/dialog_components/color_selector.dart';
+import 'package:eis_todo_app/view/widgets/dialog_components/icon_selector.dart';
+import 'package:eis_todo_app/view/widgets/listviews/todo_lists_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

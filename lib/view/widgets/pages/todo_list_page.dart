@@ -1,7 +1,7 @@
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
 import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
-import 'package:eis_todo_app/view/widgets/add_todo_sheet.dart';
-import 'package:eis_todo_app/view/widgets/todo_list_view.dart';
+import 'package:eis_todo_app/view/widgets/dialog_components/add_todo_sheet.dart';
+import 'package:eis_todo_app/view/widgets/listviews/todo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

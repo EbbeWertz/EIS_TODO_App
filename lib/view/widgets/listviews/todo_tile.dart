@@ -1,6 +1,6 @@
 import 'package:eis_todo_app/model/data_models/todo.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
-import 'package:eis_todo_app/view/widgets/todo_detail_sheet.dart';
+import 'package:eis_todo_app/view/modals/todo_detail_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

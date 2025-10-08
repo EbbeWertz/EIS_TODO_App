@@ -2,6 +2,7 @@ import 'package:eis_todo_app/model/data_models/todo.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
 import 'package:eis_todo_app/view/todo_color.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TodoTile extends StatelessWidget {
   final Todo todo;
@@ -37,7 +38,10 @@ class TodoTile extends StatelessWidget {
             children: [
               ReorderableDragStartListener(
                 index: index,
-                child: Icon(Icons.drag_indicator, color: Theme.of(context).iconTheme.color?.withAlpha(16)),
+                child: Icon(
+                  Icons.drag_indicator,
+                  color: Theme.of(context).iconTheme.color?.withAlpha(16),
+                ),
               ),
               const SizedBox(width: 8),
               Checkbox(
@@ -52,20 +56,39 @@ class TodoTile extends StatelessWidget {
               decoration: todo.completed ? TextDecoration.lineThrough : null,
             ),
           ),
-          subtitle: todo.description != null
-              ? Text(
-            todo.description!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 12,
-              color: todo.completed
-                  ? Colors.grey
-                  : Theme.of(context).textTheme.bodySmall?.color,
-              decoration: todo.completed ? TextDecoration.lineThrough : null,
-            ),
-          )
-              : null,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (todo.description != null && todo.description!.isNotEmpty)
+                Text(
+                  todo.description!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: todo.completed
+                        ? Colors.grey
+                        : Theme.of(context).textTheme.bodySmall?.color,
+                    decoration: todo.completed ? TextDecoration.lineThrough : null,
+                  ),
+                ),
+              if (todo.deadline != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                      const SizedBox(width: 4),
+                      Text(
+                        DateFormat('dd/MM').format(todo.deadline!),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
           trailing: IconButton(
             icon: Icon(
               todo.favourite ? Icons.star : Icons.star_outline,
@@ -75,8 +98,8 @@ class TodoTile extends StatelessWidget {
               todoListNotifier.updateTodoFavourite(todo, !todo.favourite);
             },
           ),
-          onTap: () => {
-            // TodoDetailSheet.show(context, todo, todoListNotifier)
+          onTap: () {
+            // TodoDetailSheet.show(context, todo, todoListNotifier);
           },
         ),
       ),

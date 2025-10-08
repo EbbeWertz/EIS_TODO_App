@@ -29,8 +29,8 @@ class TodoListNotifier extends ChangeNotifier {
     });
   }
 
-  Future<void> addTodo(String title, [String? description]) async {
-    _todoRepo.addTodo(listId, title, description);
+  Future<void> addTodo(String title, [String? description, DateTime? deadline]) async {
+    _todoRepo.addTodo(listId, title, description, deadline);
   }
 
   Future<void> updateTodo(Todo todo, String title, String? description, bool favourite, DateTime? deadline) async {

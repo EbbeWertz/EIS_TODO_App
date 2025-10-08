@@ -1,9 +1,9 @@
 import 'package:eis_todo_app/model/data_models/todo_list.dart';
-import 'package:eis_todo_app/model/data_models/todo_lists.dart';
+import 'package:eis_todo_app/model/data_models/todo_list_collection.dart';
 import 'package:flutter/material.dart';
 
 class TodoListsNotifier extends ChangeNotifier {
-  final TodoLists _model = TodoLists();
+  final TodoListCollection _model = TodoListCollection();
 
   List<TodoList> get lists => _model.lists;
 

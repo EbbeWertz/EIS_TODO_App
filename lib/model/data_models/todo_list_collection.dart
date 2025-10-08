@@ -1,7 +1,7 @@
 import 'todo_list.dart';
 import 'package:flutter/material.dart';
 
-class TodoLists {
+class TodoListCollection {
   final List<TodoList> _lists = [];
 
   List<TodoList> get lists => List.unmodifiable(_lists);

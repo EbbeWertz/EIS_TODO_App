@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-
 class Todo {
-  final String id;
+  String id;
   String title;
   String? description;
   bool completed;
+  int position;
 
-  Todo({required this.title, this.description, this.completed = false}): id = UniqueKey().toString();
+  Todo({required this.id, required this.title, this.description, this.completed = false, required this.position});
 
   void toggleCompleted(){
     completed = !completed;

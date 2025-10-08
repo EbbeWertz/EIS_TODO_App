@@ -12,7 +12,7 @@ part 'todo_database.g.dart';
 
 @DriftDatabase(tables: [TodoListsTable, TodosTable])
 class TodoDatabase extends _$TodoDatabase {
-  TodoDatabase(QueryExecutor e) : super(e);
+  TodoDatabase(super.e);
 
   @override
   int get schemaVersion => 1;

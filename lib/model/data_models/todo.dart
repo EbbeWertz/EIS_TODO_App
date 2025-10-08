@@ -4,8 +4,10 @@ class Todo {
   String? description;
   bool completed;
   int position;
+  bool favourite;
+  DateTime? deadline;
 
-  Todo({required this.id, required this.title, this.description, this.completed = false, required this.position});
+  Todo({required this.id, required this.title, this.description, this.completed = false, required this.position, this.favourite = false, this.deadline});
 
   void toggleCompleted(){
     completed = !completed;

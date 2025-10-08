@@ -16,6 +16,8 @@ class TodoRepository {
       description: row.description,
       completed: row.completed,
       position: row.position,
+      deadline: row.deadline,
+      favourite: row.favourite
     );
   }
 
@@ -25,7 +27,7 @@ class TodoRepository {
     return query.watch().map((rows) => rows.map(_fromDb).toList());
   }
 
-  Future<void> addTodo(String listId, String title, [String? description]) async {
+  Future<void> addTodo(String listId, String title, [String? description, DateTime? deadline]) async {
     final position = await db.todosTable.count().getSingle();
     await db.into(db.todosTable).insert(TodosTableCompanion.insert(
       id: _uuid.v4(),
@@ -34,8 +36,26 @@ class TodoRepository {
       description: Value(description),
       completed: const Value(false),
       position: position,
+      deadline: Value(deadline),
     ));
   }
+
+  Future<void> updateTodo(Todo todo, String title, String? description, bool favourite, DateTime? deadline) async {
+    await (db.update(db.todosTable)..where((tbl) => tbl.id.equals(todo.id)))
+        .write(TodosTableCompanion(
+      title: Value(title),
+      description: Value(description),
+
+    ));
+  }
+
+  Future<void> updateTodoFavourite(Todo todo, bool favourite) async {
+    await (db.update(db.todosTable)..where((tbl) => tbl.id.equals(todo.id)))
+        .write(TodosTableCompanion(
+      favourite: Value(favourite),
+    ));
+  }
+
 
   Future<void> removeTodo(String id) =>
       (db.delete(db.todosTable)..where((tbl) => tbl.id.equals(id))).go();
@@ -64,4 +84,6 @@ class TodoRepository {
       }
     });
   }
+
+
 }

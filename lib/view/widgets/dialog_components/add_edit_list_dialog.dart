@@ -7,12 +7,12 @@ import 'package:eis_todo_app/view/widgets/dialog_components/icon_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddListDialog{
+class AddOrEditListDialog{
 
   final String title;
   final TodoList? existingList;
 
-  AddListDialog({required this.title, this.existingList});
+  AddOrEditListDialog({required this.title, this.existingList});
 
   void show(BuildContext context) {
     final nameController = TextEditingController(

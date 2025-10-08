@@ -1,7 +1,7 @@
 import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
 import 'package:eis_todo_app/view/todo_color.dart';
 import 'package:eis_todo_app/view/todo_icon.dart';
-import 'package:eis_todo_app/view/widgets/dialog_components/add_list_dialog.dart';
+import 'package:eis_todo_app/view/widgets/dialog_components/add_edit_list_dialog.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/color_selector.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/icon_selector.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_lists_view.dart';
@@ -22,7 +22,7 @@ class AllListsPage extends StatelessWidget {
       ),
       body: TodoListsView(todoListsNotifier: todoListsNotifier),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => AddListDialog(title: "New List").show(context),
+        onPressed: () => AddOrEditListDialog(title: "New List").show(context),
         tooltip: 'Add List',
         child: const Icon(Icons.add),
       ),

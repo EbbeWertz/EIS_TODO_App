@@ -8,4 +8,6 @@ class TodosTable extends Table {
   TextColumn get description => text().nullable()();
   BoolColumn get completed => boolean().withDefault(Constant(false))();
   IntColumn get position => integer()();
+  BoolColumn get favourite => boolean().withDefault(Constant(false))();
+  DateTimeColumn get deadline => dateTime().nullable()();
 }

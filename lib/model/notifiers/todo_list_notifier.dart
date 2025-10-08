@@ -33,6 +33,16 @@ class TodoListNotifier extends ChangeNotifier {
     _todoRepo.addTodo(listId, title, description);
   }
 
+  Future<void> updateTodo(Todo todo, String title, String? description, bool favourite, DateTime? deadline) async {
+    _todoRepo.updateTodo(todo, title, description, favourite, deadline);
+  }
+
+  Future<void> updateTodoFavourite(Todo todo, bool favourite) async {
+    if(favourite) {
+      _todoRepo.reorderTodo(listId, todo.position, 0);
+    }
+    _todoRepo.updateTodoFavourite(todo, favourite);
+  }
 
   Future<void> removeTodo(Todo todo) async {
     _todoRepo.removeTodo(todo.id);
@@ -43,9 +53,8 @@ class TodoListNotifier extends ChangeNotifier {
 
   Future<void> reorderActiveTodo(int oldIndex, int newIndex) async {
     // dummy re-order zodat de UI wel al kan updaten
-    final active = activeTodos;
-    final moved = active.removeAt(oldIndex);
-    active.insert(newIndex, moved);
+    final moved = _todos.removeAt(oldIndex);
+    _todos.insert(newIndex, moved);
     notifyListeners();
 
     await _todoRepo.reorderTodo(listId, oldIndex, newIndex);

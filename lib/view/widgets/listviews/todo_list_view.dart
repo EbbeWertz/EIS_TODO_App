@@ -12,34 +12,46 @@ class TodoListView extends StatelessWidget {
     final activeTodos = todoListNotifier.activeTodos;
     final completedTodos = todoListNotifier.completedTodos;
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        if (activeTodos.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 40.0),
-            child: Center(
-              child: Text(
-                completedTodos.isEmpty
-                ? 'You don\'t have any TODOs in this list.\n\nAdd one with the + button!'
-                : 'You have completed all your TODOs ✅',
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ),
+    if (activeTodos.isEmpty && completedTodos.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Text(
+            'You don\'t have any TODOs in this list.\n\nAdd one with the + button!',
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            textAlign: TextAlign.center,
           ),
-        ...[
-          for (int i = 0; i < activeTodos.length; i++)
-            TodoTile(
-              todo: activeTodos[i],
-              index: i,
-              colorId: todoListNotifier.todoList!.color,
-              todoListNotifier: todoListNotifier,
-            ),
-        ],
-        if (completedTodos.isNotEmpty) ...[
-          const SizedBox(height: 16),
+        ),
+      );
+    }
+
+    return ReorderableListView(
+      padding: const EdgeInsets.all(16),
+      onReorder: (oldIndex, newIndex) {
+        if (newIndex > oldIndex) newIndex -= 1;
+        todoListNotifier.reorderActiveTodo(oldIndex, newIndex);
+      },
+      proxyDecorator: (child, index, animation) {
+        return Material(
+          borderRadius: BorderRadius.circular(12),
+          elevation: 4,
+          color: Colors.transparent,
+          shadowColor: Colors.black26,
+          child: child,
+        );
+      },
+      children: [
+        for (int i = 0; i < activeTodos.length; i++)
+          TodoTile(
+            key: ValueKey(activeTodos[i].id),
+            todo: activeTodos[i],
+            index: i,
+            colorId: todoListNotifier.todoList!.color,
+            todoListNotifier: todoListNotifier,
+          ),
+        if (completedTodos.isNotEmpty)
           ExpansionTile(
+            key: const ValueKey('completed'),
             title: Text(
               'Completed (${completedTodos.length})',
               style: TextStyle(
@@ -50,6 +62,7 @@ class TodoListView extends StatelessWidget {
             children: [
               for (int i = 0; i < completedTodos.length; i++)
                 TodoTile(
+                  key: ValueKey(completedTodos[i].id),
                   todo: completedTodos[i],
                   index: i,
                   colorId: todoListNotifier.todoList!.color,
@@ -57,7 +70,6 @@ class TodoListView extends StatelessWidget {
                 ),
             ],
           ),
-        ],
       ],
     );
   }

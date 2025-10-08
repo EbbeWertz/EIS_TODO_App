@@ -9,7 +9,7 @@ import 'package:eis_todo_app/view/widgets/listviews/todo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../dialog_components/add_list_dialog.dart' show AddListDialog;
+import '../dialog_components/add_edit_list_dialog.dart' show AddOrEditListDialog;
 class TodoListPage extends StatelessWidget {
   final String listId;
 
@@ -54,7 +54,7 @@ class TodoListPage extends StatelessWidget {
                     if (value == 'delete') {
                       _confirmDelete(context, todoListsNotifier);
                     } else if (value == "edit"){
-                      AddListDialog(title: "Edit List", existingList: todoList).show(context);
+                      AddOrEditListDialog(title: "Edit List", existingList: todoList).show(context);
                     }
                   },
                   itemBuilder: (context) => [

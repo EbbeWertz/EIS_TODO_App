@@ -1,4 +1,3 @@
-import 'package:eis_todo_app/model/data_models/todo_list.dart';
 import 'package:eis_todo_app/model/database/repositories/todo_list_repository.dart';
 import 'package:eis_todo_app/model/database/repositories/todo_repository.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
@@ -9,6 +8,8 @@ import 'package:eis_todo_app/view/todo_icon.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../dialog_components/add_list_dialog.dart' show AddListDialog;
 class TodoListPage extends StatelessWidget {
   final String listId;
 
@@ -52,6 +53,8 @@ class TodoListPage extends StatelessWidget {
                   onSelected: (value) {
                     if (value == 'delete') {
                       _confirmDelete(context, todoListsNotifier);
+                    } else if (value == "edit"){
+                      AddListDialog(title: "Edit List", existingList: todoList).show(context);
                     }
                   },
                   itemBuilder: (context) => [
@@ -59,6 +62,10 @@ class TodoListPage extends StatelessWidget {
                       value: 'delete',
                       child: Text('Delete List',
                           style: TextStyle(color: Colors.red)),
+                    ),
+                    const PopupMenuItem(
+                      value: 'edit',
+                      child: Text('Edit List'),
                     ),
                   ],
                 ),

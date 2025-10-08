@@ -8,9 +8,9 @@ class TodoListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoList = context.watch<TodoListNotifier>();
-    final activeTodos = todoList.activeTodos;
-    final completedTodos = todoList.completedTodos;
+    final todoListNotifier = context.watch<TodoListNotifier>();
+    final activeTodos = todoListNotifier.activeTodos;
+    final completedTodos = todoListNotifier.completedTodos;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -28,7 +28,15 @@ class TodoListView extends StatelessWidget {
               ),
             ),
           ),
-        ...activeTodos.map((todo) => TodoTile(todo: todo)),
+        ...[
+          for (int i = 0; i < activeTodos.length; i++)
+            TodoTile(
+              todo: activeTodos[i],
+              index: i,
+              colorId: todoListNotifier.todoList!.color,
+              todoListNotifier: todoListNotifier,
+            ),
+        ],
         if (completedTodos.isNotEmpty) ...[
           const SizedBox(height: 16),
           ExpansionTile(
@@ -39,7 +47,15 @@ class TodoListView extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            children: completedTodos.map((todo) => TodoTile(todo: todo)).toList(),
+            children: [
+              for (int i = 0; i < completedTodos.length; i++)
+                TodoTile(
+                  todo: completedTodos[i],
+                  index: i,
+                  colorId: todoListNotifier.todoList!.color,
+                  todoListNotifier: todoListNotifier,
+                ),
+            ],
           ),
         ],
       ],

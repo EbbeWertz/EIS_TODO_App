@@ -20,12 +20,22 @@ class TodoListCollectionNotifier extends ChangeNotifier {
     _repo.addList(name, colorId, iconId);
   }
 
+  Future<void> updateList(String id, String name, int colorId, int iconId) async {
+    _repo.updateList(id, name, colorId, iconId);
+  }
+
   Future<void> removeList(String listId) async {
     _repo.removeList(listId);
   }
 
   Future<void> reOrderLists(int oldIndex, int newIndex) async {
+    // dummy re-order zodat de UI wel al kan updaten
+    final moved = _lists.removeAt(oldIndex);
+    _lists.insert(newIndex, moved);
+    notifyListeners();
+
     _repo.reorderLists(oldIndex, newIndex);
   }
+
 
 }

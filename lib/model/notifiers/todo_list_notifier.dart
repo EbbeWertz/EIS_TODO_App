@@ -42,9 +42,12 @@ class TodoListNotifier extends ChangeNotifier {
   }
 
   Future<void> reorderActiveTodo(int oldIndex, int newIndex) async {
+    // dummy re-order zodat de UI wel al kan updaten
     final active = activeTodos;
     final moved = active.removeAt(oldIndex);
     active.insert(newIndex, moved);
+    notifyListeners();
+
     await _todoRepo.reorderTodo(listId, oldIndex, newIndex);
   }
 

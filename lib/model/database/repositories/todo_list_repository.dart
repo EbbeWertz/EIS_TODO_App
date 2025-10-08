@@ -45,6 +45,16 @@ class TodoListRepository {
     ));
   }
 
+  Future<void> updateList(String id, String name, int colorId, int iconId) async {
+    await (db.update(db.todoListsTable)
+      ..where((tbl) => tbl.id.equals(id)))
+        .write(TodoListsTableCompanion(
+      name: Value(name),
+      color: Value(colorId),
+      icon: Value(iconId),
+    ));
+  }
+
   Future<void> removeList(String listId) async {
     final deleteQuery = db.delete(db.todoListsTable)..where((tbl) => tbl.id.equals(listId));
     await deleteQuery.go();
@@ -63,7 +73,7 @@ class TodoListRepository {
       for (int i = 0; i < lists.length; i++) {
         b.update(
           db.todoListsTable,
-          TodosTableCompanion(position: Value(i)),
+          TodoListsTableCompanion(position: Value(i)),
           where: (tbl) => tbl.id.equals(lists[i].id),
         );
       }

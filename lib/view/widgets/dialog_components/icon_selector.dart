@@ -7,7 +7,6 @@ class IconSelector extends StatelessWidget {
 
   static final _icons = [for (int id = 0; id < TodoIcon.maxId; id++) TodoIcon.fromIconId(id)];
 
-
   const IconSelector({super.key, required this.value, required this.onChanged});
 
   @override

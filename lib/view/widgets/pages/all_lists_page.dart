@@ -1,4 +1,6 @@
 import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
+import 'package:eis_todo_app/view/todo_color.dart';
+import 'package:eis_todo_app/view/todo_icon.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/color_selector.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/icon_selector.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_lists_view.dart';
@@ -10,14 +12,14 @@ class AllListsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoLists = context.watch<TodoListCollectionNotifier>();
+    final todoListsNotifier = context.watch<TodoListCollectionNotifier>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Todo Lists'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: TodoListsView(todoLists: todoLists),
+      body: TodoListsView(todoListsNotifier: todoListsNotifier),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddListDialog(context),
         tooltip: 'Add List',
@@ -28,38 +30,43 @@ class AllListsPage extends StatelessWidget {
 
   void _showAddListDialog(BuildContext context) {
     final nameController = TextEditingController();
-    IconData selectedIcon = Icons.list;
-    Color selectedColor = Colors.blue;
+    TodoIcon selectedIcon = TodoIcon.fromIconId(0);
+    TodoColor selectedColor = TodoColor.fromColorId(0);
 
     showDialog(
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           title: const Text('New List'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(hintText: 'List name'),
-                autofocus: true,
-              ),
-              const SizedBox(height: 16),
-              Row(
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconSelector(
-                    value: selectedIcon,
-                    onChanged: (icon) => setState(() => selectedIcon = icon),
-                  ),
-                  const SizedBox(width: 16),
-                  ColorSelector(
-                    value: selectedColor,
-                    onChanged: (color) => setState(() => selectedColor = color),
+                  TextField( controller: nameController, decoration: const InputDecoration(hintText: 'List name'), autofocus: true, ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        child: IconSelector(
+                          value: selectedIcon,
+                          onChanged: (icon) => setState(() => selectedIcon = icon),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        height: 40,
+                        child: ColorSelector(
+                          value: selectedColor,
+                          onChanged: (color) => setState(() => selectedColor = color),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -71,8 +78,8 @@ class AllListsPage extends StatelessWidget {
                 if (name.isNotEmpty) {
                   context.read<TodoListCollectionNotifier>().addList(
                     name,
-                    selectedColor,
-                    selectedIcon,
+                    selectedColor.id,
+                    selectedIcon.id,
                   );
                   Navigator.pop(context);
                 }

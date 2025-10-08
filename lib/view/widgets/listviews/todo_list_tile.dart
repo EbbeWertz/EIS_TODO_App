@@ -1,4 +1,6 @@
 import 'package:eis_todo_app/model/data_models/todo_list.dart';
+import 'package:eis_todo_app/view/todo_color.dart';
+import 'package:eis_todo_app/view/todo_icon.dart';
 import 'package:eis_todo_app/view/widgets/pages/todo_list_page.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,7 @@ class TodoListTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Material(
         color: ColorScheme.fromSeed(
-          seedColor: list.color,
+          seedColor: TodoColor.fromColorId(list.color).materialColor,
           brightness: Theme.of(context).brightness,
         ).surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
@@ -28,7 +30,7 @@ class TodoListTile extends StatelessWidget {
                 child: Icon(Icons.drag_indicator, color: Theme.of(context).iconTheme.color?.withAlpha(16)),
               ),
               const SizedBox(width: 8),
-              Icon(list.icon, color: list.color),
+              Icon(TodoIcon.fromIconId(list.icon).materialIconData, color: TodoColor.fromColorId(list.color).materialColor),
             ],
           ),
           title: Text(list.name),
@@ -37,7 +39,7 @@ class TodoListTile extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => TodoListPage(todoList: list),
+                builder: (_) => TodoListPage(listId: list.id),
               ),
             );
           },

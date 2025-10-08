@@ -23,5 +23,11 @@ class TodoIcon{
   IconData get materialIconData{
     return _materialIcons[id];
   }
+
+  @override
+  bool operator ==(Object other) => other is TodoIcon && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 

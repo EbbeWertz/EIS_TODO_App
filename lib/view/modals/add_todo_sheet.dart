@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddTodoSheet {
-  static void show(BuildContext context) {
+  TodoListNotifier todoListNotifier;
+
+  AddTodoSheet(this.todoListNotifier);
+
+  void show(BuildContext context) {
     final titleController = TextEditingController();
     final descController = TextEditingController();
 
@@ -33,7 +37,7 @@ class AddTodoSheet {
                       hintText: 'What do you need to do?',
                       border: InputBorder.none,
                     ),
-                    onSubmitted: (_) => _addTodo(context, titleController, descController),
+                    onSubmitted: (_) => _addTodo(context, titleController, descController, todoListNotifier),
                   ),
                   TextField(
                     controller: descController,
@@ -51,7 +55,7 @@ class AddTodoSheet {
                 bottom: 12,
                 right: 8,
                 child: FloatingActionButton.small(
-                  onPressed: () => _addTodo(context, titleController, descController),
+                  onPressed: () => _addTodo(context, titleController, descController, todoListNotifier),
                   tooltip: 'Add Todo',
                   child: const Icon(Icons.check),
                 ),
@@ -64,11 +68,11 @@ class AddTodoSheet {
   }
 
   static void _addTodo(BuildContext context, TextEditingController titleController,
-      TextEditingController descController) {
+      TextEditingController descController, TodoListNotifier notifier) {
     final title = titleController.text.trim();
     final desc = descController.text.trim();
     if (title.isNotEmpty) {
-      context.read<TodoListNotifier>().addTodo(title, desc.isNotEmpty ? desc : null);
+      notifier.addTodo(title, desc.isNotEmpty ? desc : null);
       Navigator.pop(context);
     }
   }

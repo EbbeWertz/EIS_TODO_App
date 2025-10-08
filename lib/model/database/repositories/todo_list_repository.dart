@@ -25,6 +25,10 @@ class TodoListRepository {
     final query = db.select(db.todoListsTable)..orderBy([(tbl) => OrderingTerm.asc(tbl.position)]);
     return query.watch().map((rows) => rows.map(_fromDb).toList());
   }
+  Stream<TodoList?> watchListById(String id) {
+    final query = db.select(db.todoListsTable)..where((tbl) => tbl.id.equals(id));
+    return query.watchSingleOrNull().map((row) => row != null ? _fromDb(row) : null);
+  }
 
   Future<void> addList(String name, int colorId, int iconId) async {
     final countExpr = db.todoListsTable.id.count();

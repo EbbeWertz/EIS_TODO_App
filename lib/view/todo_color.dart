@@ -23,5 +23,11 @@ class TodoColor{
   MaterialColor get materialColor{
     return _materialColors[id];
   }
+
+  @override
+  bool operator ==(Object other) => other is TodoColor && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 

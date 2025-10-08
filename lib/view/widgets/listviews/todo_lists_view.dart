@@ -3,13 +3,14 @@ import 'package:eis_todo_app/view/widgets/listviews/todo_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class TodoListsView extends StatelessWidget {
-  const TodoListsView({super.key, required this.todoLists});
 
-  final TodoListCollectionNotifier todoLists;
+  final TodoListCollectionNotifier todoListsNotifier;
+  const TodoListsView({super.key, required this.todoListsNotifier});
 
   @override
   Widget build(BuildContext context) {
-    if (todoLists.lists.isEmpty) {
+    final lists = todoListsNotifier.lists;
+    if (lists.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 40),
@@ -26,11 +27,11 @@ class TodoListsView extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex -= 1;
-        todoLists.reOrderLists(oldIndex, newIndex);
+        todoListsNotifier.reOrderLists(oldIndex, newIndex);
       },
       children: [
-        for (int i = 0; i < todoLists.lists.length; i++)
-          TodoListTile(key: ValueKey(todoLists.lists[i].id), list: todoLists.lists[i], index: i),
+        for (int i = 0; i < lists.length; i++)
+          TodoListTile(key: ValueKey(lists[i].id), list: lists[i], index: i),
       ],
       // proxyDecorator = vorm voor de schaduw als de tile ge-dragged word
       // default vorm = een rectangle box, wat niet aansluit bij de tile shape

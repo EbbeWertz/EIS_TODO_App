@@ -1,11 +1,11 @@
-import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
+import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class TodoListsView extends StatelessWidget {
   const TodoListsView({super.key, required this.todoLists});
 
-  final TodoListsNotifier todoLists;
+  final TodoListCollectionNotifier todoLists;
 
   @override
   Widget build(BuildContext context) {

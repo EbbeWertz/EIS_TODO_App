@@ -1,33 +1,41 @@
-import 'package:eis_todo_app/model/data_models/todo.dart';
-import 'package:eis_todo_app/model/data_models/todo_list.dart';
+import 'package:eis_todo_app/model/database/repositories/todo_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:eis_todo_app/model/data_models/todo.dart';
 
 class TodoListNotifier extends ChangeNotifier {
-  final TodoList _todoList;
+  final TodoRepository _repo;
+  final String listId;
 
-  TodoListNotifier(this._todoList);
+  List<Todo> _todos = [];
+  List<Todo> get activeTodos => _todos.where((t) => !t.completed).toList(growable: false);
+  List<Todo> get completedTodos => _todos.where((t) => t.completed).toList(growable: false);
+  List<Todo> get allTodos => List.unmodifiable(_todos);
 
-  List<Todo> get activeTodos => _todoList.activeTodos;
-  List<Todo> get completedTodos => _todoList.completedTodos;
-  List<Todo> get allTodos => _todoList.allTodos;
-
-  void addTodo(String title, [String? description]) {
-    _todoList.addTodo(title, description);
-    notifyListeners();
+  TodoListNotifier(this._repo, this.listId) {
+    // database is reactive: notifyListeners gebeurt dus als de database update
+    _repo.watchTodosForList(listId).listen((todos) {
+      _todos = todos;
+      notifyListeners();
+    });
   }
 
-  void removeTodo(Todo todo) {
-    _todoList.removeTodo(todo);
-    notifyListeners();
+  Future<void> addTodo(String title, [String? description]) async {
+    _repo.addTodo(listId, title, description);
   }
 
-  void toggleTodoStatus(Todo todo) {
-    _todoList.toggleTodoStatus(todo);
-    notifyListeners();
+
+  Future<void> removeTodo(Todo todo) async {
+    _repo.removeTodo(todo.id);
+  }
+  Future<void> toggleTodoStatus(Todo todo) async {
+    _repo.toggleTodo(todo.id, !todo.completed);
   }
 
-  void reorderActiveTodo(int oldIndex, int newIndex) {
-    _todoList.reorderActiveTodo(oldIndex, newIndex);
-    notifyListeners();
+  Future<void> reorderActiveTodo(int oldIndex, int newIndex) async {
+    final active = activeTodos;
+    final moved = active.removeAt(oldIndex);
+    active.insert(newIndex, moved);
+    await _repo.reorderTodo(listId, oldIndex, newIndex);
   }
+
 }

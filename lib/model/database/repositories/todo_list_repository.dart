@@ -41,15 +41,28 @@ class TodoListRepository {
     ));
   }
 
-  Future<void> removeList(TodoList list) =>
-      (db.delete(db.todoListsTable)..where((tbl) => tbl.id.equals(list.id))).go();
+  Future<void> removeList(String listId) async {
+    final deleteQuery = db.delete(db.todoListsTable)..where((tbl) => tbl.id.equals(listId));
+    await deleteQuery.go();
+  }
 
-  Future<void> reorderLists(List<TodoList> lists, int oldIndex, int newIndex) async {
+  Future<void> reorderLists(int oldIndex, int newIndex) async {
+    final listsQuery = db.select(db.todoListsTable)..orderBy([(tbl) => OrderingTerm.asc(tbl.position)]);
+    final lists = await listsQuery.get();
+
+    //reorder
     final moved = lists.removeAt(oldIndex);
     lists.insert(newIndex, moved);
-    for (int i = 0; i < lists.length; i++) {
-      await (db.update(db.todoListsTable)..where((tbl) => tbl.id.equals(lists[i].id)))
-          .write(TodoListsTableCompanion(position: Value(i)));
-    }
+
+    //update positions
+    await db.batch((b){
+      for (int i = 0; i < lists.length; i++) {
+        b.update(
+          db.todoListsTable,
+          TodosTableCompanion(position: Value(i)),
+          where: (tbl) => tbl.id.equals(lists[i].id),
+        );
+      }
+    });
   }
 }

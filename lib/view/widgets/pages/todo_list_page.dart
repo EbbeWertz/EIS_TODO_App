@@ -1,6 +1,6 @@
 import 'package:eis_todo_app/model/data_models/todo_list.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
-import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
+import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
 import 'package:eis_todo_app/view/modals/add_todo_sheet.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_list_view.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class TodoListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoLists = context.read<TodoListsNotifier>();
+    final todoLists = context.read<TodoListCollectionNotifier>();
 
     return ChangeNotifierProvider(
       create: (_) => TodoListNotifier(todoList),
@@ -56,7 +56,7 @@ class TodoListPage extends StatelessWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, TodoListsNotifier todoLists) {
+  void _confirmDelete(BuildContext context, TodoListCollectionNotifier todoLists) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

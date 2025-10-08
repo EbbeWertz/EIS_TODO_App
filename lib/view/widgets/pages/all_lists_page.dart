@@ -1,4 +1,4 @@
-import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
+import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/color_selector.dart';
 import 'package:eis_todo_app/view/widgets/dialog_components/icon_selector.dart';
 import 'package:eis_todo_app/view/widgets/listviews/todo_lists_view.dart';
@@ -10,7 +10,7 @@ class AllListsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoLists = context.watch<TodoListsNotifier>();
+    final todoLists = context.watch<TodoListCollectionNotifier>();
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +69,7 @@ class AllListsPage extends StatelessWidget {
               onPressed: () {
                 final name = nameController.text.trim();
                 if (name.isNotEmpty) {
-                  context.read<TodoListsNotifier>().addList(
+                  context.read<TodoListCollectionNotifier>().addList(
                     name,
                     selectedColor,
                     selectedIcon,

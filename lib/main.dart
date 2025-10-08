@@ -1,5 +1,5 @@
 import 'package:eis_todo_app/model/notifiers/theme_notifier.dart';
-import 'package:eis_todo_app/model/notifiers/todo_lists_notifier.dart';
+import 'package:eis_todo_app/model/notifiers/todo_list_collection_notifier.dart';
 import 'package:eis_todo_app/view/widgets/pages/all_lists_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +8,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => TodoListsNotifier()),
+        ChangeNotifierProvider(create: (_) => TodoListCollectionNotifier()),
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
       ],
       child: const MyApp(),

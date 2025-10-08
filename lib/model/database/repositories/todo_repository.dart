@@ -45,7 +45,7 @@ class TodoRepository {
         .write(TodosTableCompanion(completed: Value(newValue)));
   }
 
-  Future<void> reorderTodo(String listId, int oldIndex, int newIndex, List<TodosTableData> todos) async {
+  Future<void> reorderTodo(String listId, int oldIndex, int newIndex) async {
     final todosQuery = db.select(db.todosTable)..where((t) => t.listId.equals(listId))..orderBy([(t) => OrderingTerm.asc(t.position)]);
     final todos = await todosQuery.get();
 
@@ -54,9 +54,14 @@ class TodoRepository {
     todos.insert(newIndex, moved);
 
     // update positions
-    for (int i = 0; i < todos.length; i++) {
-      final query = db.update(db.todosTable)..where((t) => t.id.equals(todos[i].id));
-      await query.write(TodosTableCompanion(position: Value(i)));
-    }
+    await db.batch((b) {
+      for (int i = 0; i < todos.length; i++) {
+        b.update(
+          db.todosTable,
+          TodosTableCompanion(position: Value(i)),
+          where: (t) => t.id.equals(todos[i].id),
+        );
+      }
+    });
   }
 }

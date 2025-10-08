@@ -1,23 +1,11 @@
+import 'package:eis_todo_app/view/todo_color.dart';
 import 'package:flutter/material.dart';
 
 class ColorSelector extends StatelessWidget {
-  final Color value;
-  final ValueChanged<Color> onChanged;
+  final TodoColor value;
+  final ValueChanged<TodoColor> onChanged;
 
-  static final colors = [
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.deepPurple,
-    Colors.indigo,
-    Colors.blue,
-    Colors.lightBlue,
-    Colors.cyan,
-    Colors.teal,
-    Colors.green,
-    Colors.lime,
-    Colors.yellow,
-  ];
+  static final _colors = [for (int id = 0; id < TodoColor.maxId; id++) TodoColor.fromColorId(id)];
 
   const ColorSelector({
     super.key,
@@ -27,17 +15,17 @@ class ColorSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Color>(
+    return DropdownButton<TodoColor>(
       value: value,
       items: [
-        for (final color in colors)
+        for (final color in _colors)
           DropdownMenuItem(
             value: color,
             child: Container(
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: color,
+                color: color.materialColor,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: Theme.of(context).dividerColor),
               ),

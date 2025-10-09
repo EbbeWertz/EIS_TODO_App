@@ -1,16 +1,27 @@
+import 'package:eis_todo_app/model/data_models/todo.dart';
 import 'package:eis_todo_app/model/notifiers/todo_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AddTodoSheet {
+class TodoAddOrEditSheet {
   final TodoListNotifier todoListNotifier;
+  final Todo? todo; // null = add mode, non-null = edit mode
 
-  AddTodoSheet(this.todoListNotifier);
+  TodoAddOrEditSheet(this.todoListNotifier, [this.todo]);
 
   void show(BuildContext context) {
-    final titleController = TextEditingController();
-    final descController = TextEditingController();
-    DateTime? selectedDate; // null = no deadline
+    final titleController = TextEditingController(text: todo?.title ?? '');
+    final descController = TextEditingController(text: todo?.description ?? '');
+    DateTime? selectedDate = todo?.deadline;
+
+    if(todo != null){
+      titleController.addListener(() {
+        _saveTodo(context, titleController, descController, selectedDate, false);
+      });
+      descController.addListener(() {
+        _saveTodo(context, titleController, descController, selectedDate, false);
+      });
+    }
 
     showModalBottomSheet(
       context: context,
@@ -20,10 +31,15 @@ class AddTodoSheet {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        final viewInsets = MediaQuery.of(context).viewInsets.bottom;
-
-        return Padding(
-          padding: EdgeInsets.only(bottom: viewInsets, left: 16, right: 16, top: 16),
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
           child: StatefulBuilder(
             builder: (context, setState) => Stack(
               children: [
@@ -41,7 +57,7 @@ class AddTodoSheet {
                         border: InputBorder.none,
                       ),
                       onSubmitted: (_) =>
-                          _addTodo(context, titleController, descController, selectedDate, todoListNotifier),
+                          _saveTodo(context, titleController, descController, selectedDate, true),
                     ),
                     // Description
                     TextField(
@@ -59,15 +75,14 @@ class AddTodoSheet {
                       alignment: Alignment.centerLeft,
                       child: GestureDetector(
                         onTap: () async {
-                          // Show menu options
                           final pickedOption = await showMenu<String>(
                             context: context,
                             position: const RelativeRect.fromLTRB(100, 100, 100, 100),
-                            items: [
-                              const PopupMenuItem(value: 'None', child: Text('None')),
-                              const PopupMenuItem(value: 'Today', child: Text('Today')),
-                              const PopupMenuItem(value: 'Tomorrow', child: Text('Tomorrow')),
-                              const PopupMenuItem(value: 'Pick', child: Text('Pick Date')),
+                            items: const [
+                              PopupMenuItem(value: 'None', child: Text('None')),
+                              PopupMenuItem(value: 'Today', child: Text('Today')),
+                              PopupMenuItem(value: 'Tomorrow', child: Text('Tomorrow')),
+                              PopupMenuItem(value: 'Pick', child: Text('Pick Date')),
                             ],
                           );
 
@@ -128,16 +143,42 @@ class AddTodoSheet {
                     const SizedBox(height: 60),
                   ],
                 ),
+                if (todo == null)
                 Positioned(
                   bottom: 12,
                   right: 8,
                   child: FloatingActionButton.small(
-                    onPressed: () =>
-                        _addTodo(context, titleController, descController, selectedDate, todoListNotifier),
-                    tooltip: 'Add Todo',
+                    onPressed: () => _saveTodo(context, titleController, descController, selectedDate, true),
+                    tooltip: todo == null ? 'Add Todo' : 'Save Todo',
                     child: const Icon(Icons.check),
                   ),
                 ),
+                if (todo != null)
+                  Positioned(
+                    bottom: 12,
+                    left: 8,
+                    child: Row(
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            todoListNotifier.removeTodo(todo!);
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          label: const Text('Delete', style: TextStyle(color: Colors.red)),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            todoListNotifier.toggleTodoStatus(todo!);
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(todo!.completed ? Icons.undo : Icons.check),
+                          label: Text(todo!.completed ? 'Mark Undone' : 'Mark Done'),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -146,12 +187,21 @@ class AddTodoSheet {
     );
   }
 
-  static void _addTodo(BuildContext context, TextEditingController titleController,
-      TextEditingController descController, DateTime? deadline, TodoListNotifier notifier) {
+  void _saveTodo(BuildContext context, TextEditingController titleController,
+      TextEditingController descController, DateTime? deadline, bool close) {
     final title = titleController.text.trim();
     final desc = descController.text.trim();
-    if (title.isNotEmpty) {
-      notifier.addTodo(title, desc.isNotEmpty ? desc : null, deadline);
+
+    if (title.isEmpty) return;
+
+    if (todo == null) {
+      // Add mode
+      todoListNotifier.addTodo(title, desc.isNotEmpty ? desc : null, deadline);
+    } else {
+      // Edit mode
+      todoListNotifier.updateTodo(todo!, title, desc.isNotEmpty ? desc : null, todo!.favourite, deadline);
+    }
+    if(close) {
       Navigator.pop(context);
     }
   }

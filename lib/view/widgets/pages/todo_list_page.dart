@@ -73,7 +73,7 @@ class TodoListPage extends StatelessWidget {
             ),
             body: const TodoListView(),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => AddTodoSheet(notifier).show(context),
+              onPressed: () => TodoAddOrEditSheet(notifier).show(context),
               tooltip: 'Add Todo',
               child: const Icon(Icons.add),
             ),
